@@ -1,30 +1,49 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <h1>当前求和为:{{ $store.state.sum }}</h1>
+  <select v-model.number="n">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+  <button @click="increment">+</button>
+  <button @click="decrement">-</button>
+  <button @click="incrementOdd">当前求和为奇数再加</button>
+  <button @click="incrementWait">等一等再加</button>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import { mapState } from 'vuex'
+export default {
+  data() {
+    return {
+      n: 1
     }
+  },
+
+  methods: {
+    increment() {
+      this.$store.dispatch('jia', this.n)
+    },
+    decrement() {
+      this.$store.dispatch('jian', this.n)
+    },
+    incrementOdd() {
+      if (this.$store.state.sum % 2) {
+        this.increment()
+      }
+    },
+    incrementWait() {
+      setTimeout(() => {
+        this.increment()
+      }, 500)
+    }
+  },
+
+  mounted() {
+    const x = mapState({ sum: 'sum' })
+    console.log(x)
   }
 }
-</style>
+</script>
+
+<style lang="less" scoped></style>
